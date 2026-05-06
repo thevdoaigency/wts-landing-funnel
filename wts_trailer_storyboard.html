@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WTS Trailer Storyboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0f0f0f;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 12px;
+            font-size: 42px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #999999;
+            margin-bottom: 50px;
+            font-size: 14px;
+        }
+        
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .segment {
+            border: 2px solid #333333;
+            padding: 30px;
+            background: rgba(20, 20, 20, 0.8);
+            position: relative;
+        }
+        
+        .segment.title-card {
+            border: 3px solid #ff0000;
+            background: rgba(50, 0, 0, 0.4);
+        }
+        
+        .timecode {
+            display: inline-block;
+            background: #ff0000;
+            color: white;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        
+        .segment-type {
+            font-size: 12px;
+            color: #ff0000;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .segment-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        
+        .segment-description {
+            color: #cccccc;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        
+        .soundbites {
+            background: #0a0a0a;
+            border-left: 4px solid #ff0000;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+        
+        .soundbites strong {
+            color: #ff0000;
+        }
+        
+        .soundbite-item {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        
+        .soundbite-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .visual-note {
+            background: #1a1a1a;
+            border: 1px dashed #666666;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #999999;
+            font-style: italic;
+        }
+        
+        .duration {
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #333333;
+        }
+        
+        .duration .value {
+            color: #ff0000;
+        }
+        
+        .summary {
+            background: #1a1a1a;
+            border-left: 4px solid #ff0000;
+            padding: 30px;
+            margin-top: 50px;
+        }
+        
+        .summary h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .summary-point {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        
+        .summary-point strong {
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>WTS Trailer Storyboard</h1>
+        <p class="subtitle">45-60 second hero trailer — title card structure with soundbite segments</p>
+        
+        <div class="timeline">
+            <!-- OPENING TITLE CARD -->
+            <div class="segment title-card">
+                <div class="timecode">0:00 - 0:04</div>
+                <div class="segment-type">Title Card</div>
+                <div class="segment-title">We The Studios</div>
+                <div class="segment-description">Family First</div>
+                <div class="visual-note">Black background, white typography. 4 seconds hold. Music swells.</div>
+                <div class="duration">Duration: <span class="value">4 seconds</span></div>
+            </div>
+            
+            <!-- BLAKE SEGMENT INTRO CARD -->
+            <div class="segment title-card">
+                <div class="timecode">0:04 - 0:07</div>
+                <div class="segment-type">Title Card</div>
+                <div class="segment-title">Blake & His Biracial Family</div>
+                <div class="segment-description">Opening the conversation about parenting, identity, and shared values</div>
+                <div class="visual-note">Fade in title, hold 3 seconds. Transition to footage.</div>
+                <div class="duration">Duration: <span class="value">3 seconds</span></div>
+            </div>
+            
+            <!-- BLAKE CONTENT SEGMENT -->
+            <div class="segment">
+                <div class="timecode">0:07 - 0:18</div>
+                <div class="segment-type">Content Segment</div>
+                <div class="segment-title">Blake's World</div>
+                <div class="segment-description">Soundbites about making family moments matter, childhood nostalgia, and parenting philosophy</div>
+                <div class="soundbites">
+                    <div class="soundbite-item"><strong>VO (Blake):</strong> "I'm just trying to be funny. Just trying to make my kids laugh when they get older..."</div>
+                    <div class="soundbite-item"><strong>B-roll:</strong> Blake with Kingston, razor scene, family cooking montage</div>
+                    <div class="soundbite-item"><strong>VO (Blake):</strong> "There's nothing that jogs your adult memory quite like childhood memories..."</div>
+                </div>
+                <div class="visual-note">Fast-paced cuts between kitchen moments, outdoor scenes, father-son interactions. Warm, intimate framing.</div>
+                <div class="duration">Duration: <span class="value">11 seconds</span></div>
+            </div>
+            
+            <!-- MR. MIAMI SEGMENT INTRO CARD -->
+            <div class="segment title-card">
+                <div class="timecode">0:18 - 0:21</div>
+                <div class="segment-type">Title Card</div>
+                <div class="segment-title">Single Dad on a Mission</div>
+                <div class="segment-description">Jacob's journey building legacy through family</div>
+                <div class="visual-note">Fade in title, hold 3 seconds. Different color palette (warmer tones).</div>
+                <div class="duration">Duration: <span class="value">3 seconds</span></div>
+            </div>
+            
+            <!-- MR. MIAMI CONTENT SEGMENT -->
+            <div class="segment">
+                <div class="timecode">0:21 - 0:30</div>
+                <div class="segment-type">Content Segment</div>
+                <div class="segment-title">Jacob & Abigail</div>
+                <div class="segment-description">Father-daughter moments, hard work, and what it means to build something that lasts</div>
+                <div class="soundbites">
+                    <div class="soundbite-item"><strong>VO (Jacob):</strong> "At the center of it all. It's my daughter, Abigail..."</div>
+                    <div class="soundbite-item"><strong>B-roll:</strong> Jacob & Abby dinner scene, business moments, their song</div>
+                    <div class="soundbite-item"><strong>VO (Jacob):</strong> "Nothing comes for free. Rewards are only worth the hard work..."</div>
+                    <div class="soundbite-item"><strong>Abby (singing):</strong> "You are pretty. You are strong. You are curious."</div>
+                </div>
+                <div class="visual-note">Cinematic shots of Miami, business/family duality. Abigail's presence frames the narrative. Subtle color grading (warm, entrepreneurial).</div>
+                <div class="duration">Duration: <span class="value">9 seconds</span></div>
+            </div>
+            
+            <!-- CURTIS & CARA SEGMENT INTRO CARD -->
+            <div class="segment title-card">
+                <div class="timecode">0:30 - 0:33</div>
+                <div class="segment-type">Title Card</div>
+                <div class="segment-title">Founders Fighting for Family</div>
+                <div class="segment-description">Curtis & Cara's stand for what matters</div>
+                <div class="visual-note">Fade in title, hold 3 seconds. Bold, authoritative typography.</div>
+                <div class="duration">Duration: <span class="value">3 seconds</span></div>
+            </div>
+            
+            <!-- CURTIS & CARA CONTENT SEGMENT -->
+            <div class="segment">
+                <div class="timecode">0:33 - 0:42</div>
+                <div class="segment-type">Content Segment</div>
+                <div class="segment-title">The Founders' Why</div>
+                <div class="segment-description">Curtis and Cara's mission and their commitment to family-first values</div>
+                <div class="soundbites">
+                    <div class="soundbite-item"><strong>VO (Curtis):</strong> [Morning routine / chaos sequence — establishing the pressure]</div>
+                    <div class="soundbite-item"><strong>Cara (interview):</strong> "My husband and I are not here to corrupt people's children. We're parents. And that's why we're doing this."</div>
+                    <div class="soundbite-item"><strong>B-roll:</strong> Multi-family montage — Blake, Jacob & Abby, Curtis & Cara in production, family moments</div>
+                </div>
+                <div class="visual-note">Contrast: chaos/pressure cut with calm, purpose-driven moments. Curtis in leadership mode, Cara's conviction clear. Montage of all families showing WTS ecosystem.</div>
+                <div class="duration">Duration: <span class="value">9 seconds</span></div>
+            </div>
+            
+            <!-- CLOSING TITLE CARD -->
+            <div class="segment title-card">
+                <div class="timecode">0:42 - 0:45</div>
+                <div class="segment-type">Closing Title Card</div>
+                <div class="segment-title">We The Studios</div>
+                <div class="segment-description">Come home to what matters.</div>
+                <div class="visual-note">White typography on black. WTS logo. Tagline sits below. 3-second hold. Music resolves.</div>
+                <div class="duration">Duration: <span class="value">3 seconds</span></div>
+            </div>
+        </div>
+        
+        <!-- SUMMARY -->
+        <div class="summary">
+            <h3>Trailer Arc Summary</h3>
+            <div class="summary-point"><strong>0-4s:</strong> Opening — We The Studios / Family First (brand establishment)</div>
+            <div class="summary-point"><strong>4-7s:</strong> Blake intro card</div>
+            <div class="summary-point"><strong>7-18s:</strong> Blake segment — "Making kids laugh" + nostalgia + parenting philosophy</div>
+            <div class="summary-point"><strong>18-21s:</strong> Mr. Miami intro card</div>
+            <div class="summary-point"><strong>21-30s:</strong> Jacob & Abigail segment — Legacy + hard work + daughter's voice</div>
+            <div class="summary-point"><strong>30-33s:</strong> Founders intro card</div>
+            <div class="summary-point"><strong>33-42s:</strong> Curtis & Cara segment — "We're parents" + multi-family ecosystem proof</div>
+            <div class="summary-point"><strong>42-45s:</strong> Closing — We The Studios / Come home to what matters</div>
+            <div class="summary-point" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #333333;"><strong>Total runtime:</strong> <span class="value">45 seconds</span> | <strong>Title cards:</strong> 5 | <strong>Content segments:</strong> 3</div>
+        </div>
+    </div>
+</body>
+</html>
