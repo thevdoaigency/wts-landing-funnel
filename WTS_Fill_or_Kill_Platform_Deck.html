@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>We The Studios — Fill or Kill · Platform Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#111111;
+  --mid:#555555;
+  --line:#DDDDDD;
+  --paper:#FFFFFF;
+  --blood:#B00B00;
+  --signal:#EF1111;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--ink);font-family:'Inter',-apple-system,sans-serif;color:var(--paper)}
+
+.deck{position:relative;width:100vw;height:100vh}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:7vh 8vw;
+  opacity:0;transform:translateX(40px);
+  transition:opacity .45s ease,transform .45s ease;
+  pointer-events:none;
+  overflow-y:auto;
+}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto}
+.slide.prev{transform:translateX(-40px)}
+
+.hud{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:18px 32px;z-index:50;pointer-events:none}
+.hud .mark{font-size:11px;font-weight:800;letter-spacing:.28em;text-transform:uppercase}
+.hud .mark span{color:var(--signal)}
+.hud .count{font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--mid);font-variant-numeric:tabular-nums}
+.progress{position:fixed;bottom:0;left:0;height:3px;background:var(--signal);width:0;transition:width .45s ease;z-index:50}
+.navhint{position:fixed;bottom:18px;right:32px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);z-index:50}
+.navzone{position:fixed;top:0;bottom:0;width:18vw;z-index:40;cursor:pointer}
+.navzone.left{left:0}
+.navzone.right{right:0}
+
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:var(--signal);margin-bottom:22px}
+h1{font-size:clamp(42px,7vw,100px);font-weight:900;line-height:.95;letter-spacing:-.03em}
+h2{font-size:clamp(28px,4.2vw,54px);font-weight:800;line-height:1.02;letter-spacing:-.025em;margin-bottom:26px}
+.lede{font-size:clamp(15px,1.4vw,19px);font-weight:400;line-height:1.6;color:var(--line);max-width:780px}
+.lede strong{color:var(--paper);font-weight:600}
+.kill-word{color:var(--signal)}
+.strike{position:relative;display:inline-block}
+.strike::after{content:'';position:absolute;left:-2%;right:-2%;top:52%;height:.08em;background:var(--signal);transform:scaleX(0);transform-origin:left;transition:transform .7s cubic-bezier(.7,0,.2,1) .5s}
+.slide.active .strike::after{transform:scaleX(1)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.cardrow{display:grid;gap:18px;margin-top:36px}
+
+.card{border:1px solid #2a2a2a;border-top:3px solid var(--mid);padding:26px;background:#161616}
+.card.hot{border-top-color:var(--signal)}
+.card h3{font-size:15px;font-weight:700;letter-spacing:.04em;margin-bottom:10px}
+.card .tag{font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--mid);margin-bottom:14px}
+.card p{font-size:13.5px;line-height:1.6;color:#a8a8a8}
+.card .num{font-size:clamp(26px,2.6vw,40px);font-weight:800;letter-spacing:-.02em;margin-bottom:6px;font-variant-numeric:tabular-nums}
+.card .num small{font-size:.45em;font-weight:600;color:var(--mid);letter-spacing:0}
+
+ul.flat{list-style:none;margin-top:24px}
+ul.flat li{padding:14px 0;border-bottom:1px solid #262626;font-size:15px;line-height:1.55;color:#c9c9c9;display:flex;gap:16px}
+ul.flat li::before{content:'—';color:var(--signal);font-weight:700;flex-shrink:0}
+ul.flat li strong{color:var(--paper)}
+
+table{width:100%;border-collapse:collapse;margin-top:30px;font-size:13.5px}
+th{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--mid);text-align:left;padding:12px 14px;border-bottom:2px solid var(--signal)}
+td{padding:14px;border-bottom:1px solid #262626;color:#c9c9c9;line-height:1.45;vertical-align:top}
+td.k{color:var(--paper);font-weight:600}
+td.go{color:var(--paper);font-weight:700}
+td.kill{color:var(--signal);font-weight:700}
+tr.band td{background:#1a1a1a}
+.mono{font-variant-numeric:tabular-nums}
+
+.gate{border:1px solid #2a2a2a;background:#161616;padding:28px;display:flex;flex-direction:column;gap:14px}
+.gate .glabel{font-size:11px;font-weight:800;letter-spacing:.28em;text-transform:uppercase;color:var(--mid)}
+.gate .gmonth{font-size:clamp(34px,3.6vw,52px);font-weight:900;letter-spacing:-.03em}
+.gate .crit{font-size:13px;line-height:1.6;color:#a8a8a8}
+.gate .crit b{color:var(--paper)}
+.gate .verdict{margin-top:auto;padding-top:16px;border-top:1px solid #2a2a2a;display:flex;justify-content:space-between;font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;gap:8px}
+.gate .verdict .go{color:var(--paper)}
+.gate .verdict .kl{color:var(--signal);text-align:right}
+
+/* funnel */
+.funnel{margin-top:40px;display:flex;flex-direction:column;gap:0;max-width:880px}
+.fstage{display:grid;grid-template-columns:minmax(140px,220px) 1fr minmax(120px,170px);align-items:center;gap:24px;padding:18px 0;border-bottom:1px solid #262626}
+.fstage .fbar{height:30px;background:#1e1e1e;position:relative;overflow:hidden}
+.fstage .fbar .ffill{position:absolute;inset:0 auto 0 0;width:0;background:var(--blood);transition:width 1s cubic-bezier(.7,0,.2,1) .3s}
+.fstage:last-child .fbar .ffill{background:var(--signal)}
+.slide.active .fstage .fbar .ffill{width:var(--w)}
+.fstage .flabel{font-size:13px;font-weight:700;letter-spacing:.04em}
+.fstage .flabel small{display:block;font-weight:400;color:var(--mid);font-size:11px;margin-top:3px;letter-spacing:0}
+.fstage .fnum{font-size:clamp(17px,1.8vw,24px);font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.fstage .fnum small{display:block;font-size:10px;font-weight:600;color:var(--mid);letter-spacing:.14em;text-transform:uppercase}
+
+/* equations */
+.bigmath{display:flex;flex-direction:column;gap:8px;margin-top:30px}
+.eq{display:flex;align-items:baseline;gap:22px;padding:18px 0;border-bottom:1px solid #262626}
+.eq .figure{font-size:clamp(28px,3.4vw,48px);font-weight:800;letter-spacing:-.02em;min-width:250px;font-variant-numeric:tabular-nums}
+.eq .figure.red{color:var(--signal)}
+.eq .desc{font-size:14px;line-height:1.5;color:#a8a8a8;max-width:560px}
+.eq .desc b{color:var(--paper)}
+
+/* scenario bars */
+.scen{margin-top:36px;display:flex;flex-direction:column;gap:14px}
+.scenrow{display:grid;grid-template-columns:170px 1fr 90px;gap:20px;align-items:center}
+.scenrow .sname{font-size:13px;font-weight:700;letter-spacing:.06em}
+.scenrow .bar{height:34px;background:#1e1e1e;position:relative;overflow:hidden}
+.scenrow .bar .fill{position:absolute;inset:0 auto 0 0;width:0;transition:width 1s cubic-bezier(.7,0,.2,1) .3s;display:flex;align-items:center;padding-left:14px;font-size:12px;font-weight:700;white-space:nowrap}
+.slide.active .scenrow .bar .fill{width:var(--w)}
+.scenrow .prob{font-size:18px;font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.fill.up{background:#2c2c2c;color:var(--paper)}
+.fill.base{background:var(--blood);color:var(--paper)}
+.fill.down{background:var(--signal);color:var(--paper)}
+
+.rulelist{counter-reset:rule;margin-top:10px}
+.rulelist li{list-style:none;counter-increment:rule;padding:15px 0;border-bottom:1px solid #262626;font-size:15px;line-height:1.55;color:#c9c9c9;display:flex;gap:20px}
+.rulelist li::before{content:counter(rule,decimal-leading-zero);font-weight:800;color:var(--signal);font-variant-numeric:tabular-nums;flex-shrink:0}
+.rulelist li strong{color:var(--paper)}
+
+.foot{font-size:11px;color:var(--mid);margin-top:26px;line-height:1.6;max-width:760px}
+
+@media (max-width:860px){
+  .slide{padding:9vh 7vw}
+  .grid2,.grid3{grid-template-columns:1fr;gap:20px}
+  .fstage{grid-template-columns:1fr;gap:8px}
+  .fstage .fnum{text-align:left}
+  .scenrow{grid-template-columns:1fr;gap:8px}
+  .scenrow .prob{text-align:left}
+  .navhint{display:none}
+  table{font-size:12px}
+  th,td{padding:10px 8px}
+}
+@media (prefers-reduced-motion:reduce){
+  .slide,.strike::after,.scenrow .bar .fill,.fstage .fbar .ffill,.progress{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div class="hud">
+  <div class="mark">WE THE STUDIOS <span>/ FILL OR KILL</span></div>
+  <div class="count" id="count">01 / 14</div>
+</div>
+<div class="progress" id="progress"></div>
+<div class="navhint">← → arrows or click edges</div>
+<div class="navzone left" onclick="nav(-1)"></div>
+<div class="navzone right" onclick="nav(1)"></div>
+
+<div class="deck" id="deck">
+
+<!-- 1 TITLE -->
+<section class="slide active">
+  <div class="eyebrow">Break-even framework · 24 months · Platform edition</div>
+  <h1>5,300 paying<br>subscribers.<br><span class="strike kill-word">Or it dies.</span></h1>
+  <p class="lede" style="margin-top:36px">WTS is a streaming platform, not a YouTube channel. The business is <strong>wethestudios.com at $3.98/month</strong> — and everything else, including Blake Reynolds, YouTube, Instagram, and paid ads, exists to feed that subscription. 24 months to cover costs, or liquidate the parts.</p>
+</section>
+
+<!-- 2 THE MODEL -->
+<section class="slide">
+  <div class="eyebrow">Get the model right first</div>
+  <h2>YouTube is marketing.<br>The platform is the business.</h2>
+  <div class="cardrow grid3">
+    <div class="card">
+      <div class="tag">Top of funnel</div>
+      <h3>Free content everywhere</h3>
+      <p>Sneak peeks, 8-minute unlocks, trailers on YouTube · Instagram (largest social) · paid social. Zero barrier to entry. Blake Reynolds is the emotional hook.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Bottom of funnel</div>
+      <h3>wethestudios.com</h3>
+      <p>$3.98/month or $29.98/year. New episodes every Sunday. One of the lowest conversion barriers in streaming — less than a coffee.</p>
+    </div>
+    <div class="card hot">
+      <div class="tag">The asset</div>
+      <h3>Owned subscribers</h3>
+      <p>Recurring revenue WTS controls. Not algorithm-dependent CPM. Every framework in this deck measures progress toward one number: paying subs.</p>
+    </div>
+  </div>
+  <p class="foot">Proof of model: The Chosen made Season 1 free during COVID — revenue went up, not down. 280M viewers from free top-of-funnel feeding a deeper platform experience. Netflix and Disney+ (Andor S1 on YouTube) run the same play.</p>
+</section>
+
+<!-- 3 THE FUNNEL -->
+<section class="slide">
+  <div class="eyebrow">The machine</div>
+  <h2>The funnel, with benchmark rates</h2>
+  <div class="funnel">
+    <div class="fstage">
+      <div class="flabel">YouTube / social views<small>Sneak peeks, unlocks, clips, paid reach</small></div>
+      <div class="fbar"><div class="ffill" style="--w:100%"></div></div>
+      <div class="fnum">650K<small>per month</small></div>
+    </div>
+    <div class="fstage">
+      <div class="flabel">Click-through to site<small>~2% CTR — end cards, pinned links, title cards</small></div>
+      <div class="fbar"><div class="ffill" style="--w:34%"></div></div>
+      <div class="fnum">13,000<small>site visits</small></div>
+    </div>
+    <div class="fstage">
+      <div class="flabel">Visit → subscription<small>~3% conversion at a $3.98 price point</small></div>
+      <div class="fbar"><div class="ffill" style="--w:8%"></div></div>
+      <div class="fnum">~390<small>new subs / mo</small></div>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:30px">Net view-to-subscriber rate: <strong>~0.06%</strong>. Every lever in the business lives inside those two conversion steps — thumbnails and hooks move CTR, the landing page and trailer move site conversion. <strong>These are benchmark placeholder rates until 90 days of real funnel data replaces them.</strong></p>
+</section>
+
+<!-- 4 UNIT ECONOMICS -->
+<section class="slide">
+  <div class="eyebrow">SVOD unit economics</div>
+  <h2>What one subscriber is worth</h2>
+  <table>
+    <thead><tr><th>Metric</th><th>Figure</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Gross ARPU — monthly plan</td><td class="mono">$3.98 /mo</td><td>"Take Down Hollywood" tier</td></tr>
+      <tr><td class="k">Gross ARPU — annual plan</td><td class="mono">$2.50 /mo effective</td><td>$29.98/yr "Red, White, And Stream" — better cash, lower ARPU</td></tr>
+      <tr><td class="k">Net blended ARPU</td><td class="mono go">~$3.00 /mo</td><td>After 15–30% app-store cut on iOS/Android subs + ~3% processing on web. Push web checkout hard.</td></tr>
+      <tr><td class="k">Monthly churn (assumed)</td><td class="mono">5%</td><td>Placeholder. Niche values-driven platforms with weekly drops can beat this; must be measured from day one.</td></tr>
+      <tr class="band"><td class="k">LTV per subscriber</td><td class="mono go">~$60</td><td>$3.00 ÷ 5% churn = 20-month average life × $3.00</td></tr>
+    </tbody>
+  </table>
+  <p class="foot">Annual plans are a churn weapon: a $29.98 commitment is 12 months of guaranteed retention. The funnel should bias toward annual at checkout.</p>
+</section>
+
+<!-- 5 CAC -->
+<section class="slide">
+  <div class="eyebrow">Cost to acquire</div>
+  <h2>Two feeds, one CAC discipline</h2>
+  <div class="grid2">
+    <div>
+      <div class="card" style="margin-bottom:18px">
+        <div class="tag">Organic feed</div>
+        <h3>Sneak peek engine</h3>
+        <p>Production cost amortized across all subs it generates. YouTube CPM revenue on the free content <b style="color:#fff">offsets the marketing cost</b> — it is not a revenue line. Effective CAC trends toward $2–5 as the library compounds.</p>
+      </div>
+      <div class="card">
+        <div class="tag">Paid feed</div>
+        <h3>Meta / YouTube ads</h3>
+        <p>Benchmark $8–15 CAC for niche streaming. Paid buys speed and data; organic buys durability. Run both, measure separately, kill the loser.</p>
+      </div>
+    </div>
+    <div>
+      <div class="bigmath" style="margin-top:0">
+        <div class="eq">
+          <div class="figure">$60 : $10</div>
+          <div class="desc"><b>LTV:CAC at 6:1</b> on blended $10 CAC. Anything above 3:1 is a green light to spend more, not less.</div>
+        </div>
+        <div class="eq">
+          <div class="figure">~3.3 mo</div>
+          <div class="desc"><b>CAC payback</b> — $10 ÷ $3.00 net ARPU. Under 6 months is healthy; over 6 months kills the paid channel.</div>
+        </div>
+        <div class="eq">
+          <div class="figure red">&gt;$20</div>
+          <div class="desc"><b>The ceiling.</b> If blended CAC crosses $20 sustained, the funnel is broken regardless of LTV math on paper.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 BREAKEVEN -->
+<section class="slide">
+  <div class="eyebrow">The breakeven math</div>
+  <h2>The number is 5,300.</h2>
+  <div class="bigmath">
+    <div class="eq">
+      <div class="figure">$16K /mo</div>
+      <div class="desc">Fixed burn: Curtis &amp; Cara imputed $10K · production $3K · marketing base $2K · platform/admin $1K.</div>
+    </div>
+    <div class="eq">
+      <div class="figure">÷ $3.00</div>
+      <div class="desc">Net blended ARPU per paying subscriber per month.</div>
+    </div>
+    <div class="eq">
+      <div class="figure red">= 5,333 subs</div>
+      <div class="desc"><b>Breakeven subscriber count.</b> Roughly the population of one small Kentucky town — Blake's town, fittingly, is 2,700. You need two of them.</div>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:28px"><strong>Churn makes it a treadmill:</strong> at 5% monthly churn, holding 5,300 subs requires ~265 new subs every month just to stand still. Building to 5,500 by month 24 requires <strong>~390 new subs/month average</strong> — exactly what the benchmark funnel on slide 3 produces.</p>
+</section>
+
+<!-- 7 GROWTH CURVE -->
+<section class="slide">
+  <div class="eyebrow">The build</div>
+  <h2>What 24 months has to look like</h2>
+  <table>
+    <thead><tr><th>Phase</th><th>New subs /mo</th><th>Sub base</th><th>MRR (net)</th><th>Focus</th></tr></thead>
+    <tbody>
+      <tr><td class="k">M1–6 · Prove the funnel</td><td class="mono">100–200</td><td class="mono">~900</td><td class="mono">~$2.7K</td><td>Sneak peek pilot live. Measure real CTR, conversion, churn. Replace every placeholder in this deck.</td></tr>
+      <tr><td class="k">M7–12 · Scale what works</td><td class="mono">300–450</td><td class="mono">~2,800</td><td class="mono">~$8.4K</td><td>Roll the playbook across the catalog. Turn on paid where LTV:CAC ≥ 3. Push annual plans.</td></tr>
+      <tr><td class="k">M13–18 · Compound</td><td class="mono">450–550</td><td class="mono">~4,300</td><td class="mono">~$12.9K</td><td>Library effect kicks in — old sneak peeks keep converting. Churn reduction becomes the highest-ROI work.</td></tr>
+      <tr class="band"><td class="k">M19–24 · Cross the line</td><td class="mono">500–600</td><td class="mono go">5,500+</td><td class="mono go">$16.5K+</td><td>Breakeven and climbing. Every sub past 5,333 is margin.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 8 BLAKE'S ROLE -->
+<section class="slide">
+  <div class="eyebrow">The content engine</div>
+  <h2>Blake Reynolds is the hook,<br>not the business</h2>
+  <ul class="flat">
+    <li><strong>Raising Reynolds is the flagship funnel asset</strong> — the most emotionally accessible show for the exact audience the platform serves. The Chosen made one person feel like Jesus was their friend; the sneak peek engine does that for Blake, one free episode at a time.</li>
+    <li><strong>Cadence:</strong> two sneak peeks per month per show in pilot, scaling across all five properties once the template is proven — thumbnails, titles, cut structure, CTA placement.</li>
+    <li><strong>Every video ends with the ask</strong> — a direct title card to wethestudios.com, not a fade-out. At $3.98 the only thing between a leaned-in viewer and a subscription is a frictionless CTA.</li>
+    <li><strong>YouTube CPM on free content is a marketing rebate.</strong> It reduces effective CAC. It never appears as a revenue line in the model, so nobody optimizes for the wrong thing.</li>
+    <li><strong>The 8-minute unlock</strong> on episode one of each series removes the last trust barrier — viewers commit to a story before they ever see a paywall.</li>
+  </ul>
+</section>
+
+<!-- 9 SCENARIOS -->
+<section class="slide">
+  <div class="eyebrow">Scenario planning</div>
+  <h2>Three futures, weighted</h2>
+  <div class="scen">
+    <div class="scenrow">
+      <div class="sname">UPSIDE — Scale</div>
+      <div class="bar"><div class="fill up" style="--w:20%">8K+ subs · $24K+ MRR · churn &lt;4%</div></div>
+      <div class="prob">20%</div>
+    </div>
+    <div class="scenrow">
+      <div class="sname">BASE — Breakeven</div>
+      <div class="bar"><div class="fill base" style="--w:50%">5–6K subs · $15–18K MRR</div></div>
+      <div class="prob">50%</div>
+    </div>
+    <div class="scenrow">
+      <div class="sname">DOWNSIDE — Kill</div>
+      <div class="bar"><div class="fill down" style="--w:30%">&lt;2.5K subs · conversion never proves out</div></div>
+      <div class="prob">30%</div>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:32px">Quarterly question: <strong>which scenario are we actually in?</strong> The funnel data answers it without opinion — view-to-sub rate, CAC payback, and churn place you on this chart automatically.</p>
+</section>
+
+<!-- 10 GATES -->
+<section class="slide">
+  <div class="eyebrow">Decision gates</div>
+  <h2>Three gates. All binary.</h2>
+  <div class="grid3" style="margin-top:10px">
+    <div class="gate">
+      <div class="glabel">Gate one</div>
+      <div class="gmonth">M12</div>
+      <div class="crit"><b>GO:</b> ≥2,500 paying subs · churn ≤6% · CAC payback ≤6 months. The funnel works — scale it.</div>
+      <div class="crit"><b>PIVOT:</b> conversion strong but volume light → spend harder on paid; volume strong but churn high → fix content cadence and onboarding.</div>
+      <div class="verdict"><span class="go">GO ≥2,500</span><span class="kl">KILL &lt;1,200</span></div>
+    </div>
+    <div class="gate">
+      <div class="glabel">Gate two</div>
+      <div class="gmonth">M18</div>
+      <div class="crit"><b>GO:</b> ≥4,000 subs · LTV:CAC ≥3 · MRR ≥$12K. The treadmill is beaten — net adds exceed churn comfortably.</div>
+      <div class="crit"><b>PIVOT:</b> subs flat but churn improving → double annual-plan push; CAC rising → kill paid, ride organic library.</div>
+      <div class="verdict"><span class="go">GO ≥4,000</span><span class="kl">KILL &lt;2,800</span></div>
+    </div>
+    <div class="gate" style="border-color:var(--blood)">
+      <div class="glabel" style="color:var(--signal)">Final gate</div>
+      <div class="gmonth">M24</div>
+      <div class="crit"><b>SCALE:</b> ≥5,500 subs · MRR ≥$16.5K · cumulative cash trending positive. Every sub from here is margin.</div>
+      <div class="crit"><b>HOLD:</b> 4,500–5,300 and closing — freeze costs, let the library compound one more quarter, then re-gate.</div>
+      <div class="verdict"><span class="go">SCALE ≥5,500</span><span class="kl">LIQUIDATE &lt;4,000</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 KILL METRICS -->
+<section class="slide">
+  <div class="eyebrow">Early warning system</div>
+  <h2>Kill metrics that pre-empt the gates</h2>
+  <ul class="flat">
+    <li><strong>View-to-sub below 0.02% after 6 months of iteration</strong> — the funnel concept itself is broken, not the execution. That's a model failure, not a tactics failure.</li>
+    <li><strong>Monthly churn above 8% sustained</strong> — people sample and leave. Content-market fit problem; no amount of top-of-funnel spend fixes it.</li>
+    <li><strong>CAC payback over 6 months</strong> — kill the paid channel immediately, survive on organic, reassess at the next gate.</li>
+    <li><strong>Sunday drop cadence breaks repeatedly</strong> — retention follows reliability. A streaming service that misses release dates churns itself.</li>
+    <li><strong>Curtis or Cara signal deprioritization</strong> — the honest conversation happens immediately. Nobody runs a zombie platform.</li>
+  </ul>
+</section>
+
+<!-- 12 LIQUIDATION -->
+<section class="slide">
+  <div class="eyebrow">If the order cancels</div>
+  <h2>Liquidation playbook</h2>
+  <div class="grid2">
+    <div>
+      <table>
+        <thead><tr><th>Asset</th><th>Disposition</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Show library (5+ properties)</td><td>License or sell to FAST aggregators (Pluto, Samsung TV Plus), faith/family networks (Angel, Pure Flix adjacency), or values-aligned platforms</td></tr>
+          <tr><td class="k">Subscriber base</td><td>The most sellable asset — a paying, values-aligned D2C audience has real acquisition value to adjacent platforms</td></tr>
+          <tr><td class="k">YouTube channel + funnel system</td><td>Transfers with the library; the sneak-peek playbook is documented IP</td></tr>
+          <tr><td class="k">Platform tech</td><td>Minimal standalone value; wind down</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <p class="lede" style="font-size:15px"><strong>Timeline:</strong> soft-market test begins the day a kill trigger fires. Formal outreach inside 90 days. Subscriber base and library move together — they're worth more as a package than apart.</p>
+      <p class="lede" style="font-size:15px;margin-top:18px"><span class="kill-word" style="font-weight:700">Clean exit, no dragging.</span> A platform with 2,000 engaged paying subscribers and five shows is an acquisition; the same platform two years later, starved and stale, is a write-off.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 13 OPERATING RHYTHM -->
+<section class="slide">
+  <div class="eyebrow">The dashboard</div>
+  <h2>Five numbers, every Monday</h2>
+  <table>
+    <thead><tr><th>Metric</th><th>Healthy</th><th>Action threshold</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Net new subscribers (adds − churn)</td><td class="mono go">Positive and growing</td><td class="kill">Negative 2 months running → pivot</td></tr>
+      <tr><td class="k">View → sub conversion</td><td class="mono go">≥0.05%</td><td class="kill">&lt;0.02% after iteration → model failure</td></tr>
+      <tr><td class="k">Monthly churn</td><td class="mono go">≤5%</td><td class="kill">&gt;8% sustained → content-fit failure</td></tr>
+      <tr><td class="k">Blended CAC payback</td><td class="mono go">≤4 months</td><td class="kill">&gt;6 months → kill paid spend</td></tr>
+      <tr><td class="k">MRR vs. burn</td><td class="mono go">Gap closing monthly</td><td class="kill">Gap widening 2 quarters → gate early</td></tr>
+    </tbody>
+  </table>
+  <p class="foot">Everything else — views, followers, impressions — is diagnostic, not decisional. These five decide fill or kill.</p>
+</section>
+
+<!-- 14 CLOSER -->
+<section class="slide">
+  <div class="eyebrow">The non-negotiables</div>
+  <h2>Five rules. Then the order fills or it doesn't.</h2>
+  <ol class="rulelist">
+    <li><strong>The platform is the business.</strong> Every piece of free content exists to move someone toward wethestudios.com. No orphan content.</li>
+    <li><strong>Free feeds paid.</strong> The Chosen proved it; giving the best moments away grows revenue. Never hoard the hook behind the paywall.</li>
+    <li><strong>Measure the funnel, not the noise.</strong> Views are diagnostic. Subs, churn, and CAC payback are decisional.</li>
+    <li><strong>Annual plans are the churn weapon.</strong> Bias every checkout toward $29.98/year. Twelve months of guaranteed retention per conversion.</li>
+    <li><strong>Kill decisions are clean.</strong> A missed gate executes immediately. There is no "next month will be better."</li>
+  </ol>
+  <p class="lede" style="margin-top:32px">The funnel doesn't create demand for family entertainment — it measures it. And by month 24 it will have said, in subscriber arithmetic nobody can argue with, <strong>whether the demand is there.</strong></p>
+</section>
+
+</div>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+const count=document.getElementById('count');
+const progress=document.getElementById('progress');
+let idx=0;
+function pad(n){return String(n).padStart(2,'0')}
+function render(){
+  slides.forEach((s,i)=>{
+    s.classList.toggle('active',i===idx);
+    s.classList.toggle('prev',i<idx);
+  });
+  count.textContent=pad(idx+1)+' / '+pad(slides.length);
+  progress.style.width=((idx+1)/slides.length*100)+'%';
+}
+function nav(d){
+  idx=Math.max(0,Math.min(slides.length-1,idx+d));
+  render();
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown')nav(1);
+  if(e.key==='ArrowLeft'||e.key==='PageUp')nav(-1);
+  if(e.key==='Home'){idx=0;render()}
+  if(e.key==='End'){idx=slides.length-1;render()}
+});
+let touchX=null;
+document.addEventListener('touchstart',e=>{touchX=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(touchX===null)return;
+  const dx=e.changedTouches[0].clientX-touchX;
+  if(Math.abs(dx)>50)nav(dx<0?1:-1);
+  touchX=null;
+},{passive:true});
+render();
+</script>
+</body>
+</html>
