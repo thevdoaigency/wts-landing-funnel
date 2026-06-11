@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>We The Studios — Fill or Kill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#111111;
+  --mid:#555555;
+  --line:#DDDDDD;
+  --paper:#FFFFFF;
+  --blood:#B00B00;
+  --signal:#EF1111;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--ink);font-family:'Inter',-apple-system,sans-serif;color:var(--paper)}
+
+.deck{position:relative;width:100vw;height:100vh}
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:7vh 8vw;
+  opacity:0;transform:translateX(40px);
+  transition:opacity .45s ease,transform .45s ease;
+  pointer-events:none;
+  overflow-y:auto;
+}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:auto}
+.slide.prev{transform:translateX(-40px)}
+
+/* chrome */
+.hud{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:18px 32px;z-index:50;pointer-events:none}
+.hud .mark{font-size:11px;font-weight:800;letter-spacing:.28em;text-transform:uppercase}
+.hud .mark span{color:var(--signal)}
+.hud .count{font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--mid);font-variant-numeric:tabular-nums}
+.progress{position:fixed;bottom:0;left:0;height:3px;background:var(--signal);width:0;transition:width .45s ease;z-index:50}
+.navhint{position:fixed;bottom:18px;right:32px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid);z-index:50}
+.navzone{position:fixed;top:0;bottom:0;width:18vw;z-index:40;cursor:pointer}
+.navzone.left{left:0}
+.navzone.right{right:0}
+
+/* type system */
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:var(--signal);margin-bottom:22px}
+.eyebrow.quiet{color:var(--mid)}
+h1{font-size:clamp(42px,7.2vw,104px);font-weight:900;line-height:.95;letter-spacing:-.03em}
+h2{font-size:clamp(30px,4.4vw,58px);font-weight:800;line-height:1.02;letter-spacing:-.025em;margin-bottom:28px}
+.lede{font-size:clamp(15px,1.4vw,19px);font-weight:400;line-height:1.6;color:var(--line);max-width:760px}
+.lede strong{color:var(--paper);font-weight:600}
+.kill-word{color:var(--signal)}
+.strike{position:relative;display:inline-block}
+.strike::after{content:'';position:absolute;left:-2%;right:-2%;top:52%;height:.08em;background:var(--signal);transform:scaleX(0);transform-origin:left;transition:transform .7s cubic-bezier(.7,0,.2,1) .5s}
+.slide.active .strike::after{transform:scaleX(1)}
+
+/* layout helpers */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.cardrow{display:grid;gap:18px;margin-top:36px}
+
+.card{border:1px solid #2a2a2a;border-top:3px solid var(--mid);padding:26px;background:#161616}
+.card.hot{border-top-color:var(--signal)}
+.card h3{font-size:15px;font-weight:700;letter-spacing:.04em;margin-bottom:10px}
+.card .tag{font-size:10px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--mid);margin-bottom:14px}
+.card p{font-size:13.5px;line-height:1.6;color:#a8a8a8}
+.card .num{font-size:clamp(26px,2.6vw,40px);font-weight:800;letter-spacing:-.02em;margin-bottom:6px;font-variant-numeric:tabular-nums}
+.card .num small{font-size:.45em;font-weight:600;color:var(--mid);letter-spacing:0}
+
+/* lists */
+ul.flat{list-style:none;margin-top:24px}
+ul.flat li{padding:14px 0;border-bottom:1px solid #262626;font-size:15px;line-height:1.55;color:#c9c9c9;display:flex;gap:16px}
+ul.flat li::before{content:'—';color:var(--signal);font-weight:700;flex-shrink:0}
+ul.flat li strong{color:var(--paper)}
+
+/* tables */
+table{width:100%;border-collapse:collapse;margin-top:30px;font-size:13.5px}
+th{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--mid);text-align:left;padding:12px 14px;border-bottom:2px solid var(--signal)}
+td{padding:14px;border-bottom:1px solid #262626;color:#c9c9c9;line-height:1.45;vertical-align:top}
+td.k{color:var(--paper);font-weight:600}
+td.go{color:var(--paper);font-weight:700}
+td.kill{color:var(--signal);font-weight:700}
+tr.band td{background:#1a1a1a}
+.mono{font-variant-numeric:tabular-nums}
+
+/* gate cards */
+.gate{border:1px solid #2a2a2a;background:#161616;padding:28px;display:flex;flex-direction:column;gap:14px}
+.gate .glabel{font-size:11px;font-weight:800;letter-spacing:.28em;text-transform:uppercase;color:var(--mid)}
+.gate .gmonth{font-size:clamp(34px,3.6vw,52px);font-weight:900;letter-spacing:-.03em}
+.gate .crit{font-size:13px;line-height:1.6;color:#a8a8a8}
+.gate .crit b{color:var(--paper)}
+.gate .verdict{margin-top:auto;padding-top:16px;border-top:1px solid #2a2a2a;display:flex;justify-content:space-between;font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase}
+.gate .verdict .go{color:var(--paper)}
+.gate .verdict .kl{color:var(--signal)}
+
+/* AARRR pipeline */
+.pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:40px;border:1px solid #2a2a2a}
+.pipe .stage{padding:24px 18px;border-right:1px solid #2a2a2a;position:relative}
+.pipe .stage:last-child{border-right:none}
+.pipe .stage .letter{font-size:clamp(28px,3vw,44px);font-weight:900;color:var(--signal);line-height:1}
+.pipe .stage .sname{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin:10px 0 12px;color:var(--paper)}
+.pipe .stage p{font-size:12px;line-height:1.55;color:#9a9a9a}
+
+/* scenario bars */
+.scen{margin-top:36px;display:flex;flex-direction:column;gap:14px}
+.scenrow{display:grid;grid-template-columns:170px 1fr 90px;gap:20px;align-items:center}
+.scenrow .sname{font-size:13px;font-weight:700;letter-spacing:.06em}
+.scenrow .bar{height:34px;background:#1e1e1e;position:relative;overflow:hidden}
+.scenrow .bar .fill{position:absolute;inset:0 auto 0 0;width:0;transition:width 1s cubic-bezier(.7,0,.2,1) .3s;display:flex;align-items:center;padding-left:14px;font-size:12px;font-weight:700;white-space:nowrap}
+.slide.active .scenrow .bar .fill{width:var(--w)}
+.scenrow .prob{font-size:18px;font-weight:800;text-align:right;font-variant-numeric:tabular-nums}
+.fill.up{background:#2c2c2c;color:var(--paper)}
+.fill.base{background:var(--blood);color:var(--paper)}
+.fill.down{background:var(--signal);color:var(--paper)}
+
+/* big stat slide */
+.bigmath{display:flex;flex-direction:column;gap:8px;margin-top:30px}
+.eq{display:flex;align-items:baseline;gap:22px;padding:20px 0;border-bottom:1px solid #262626}
+.eq .figure{font-size:clamp(30px,3.6vw,52px);font-weight:800;letter-spacing:-.02em;min-width:230px;font-variant-numeric:tabular-nums}
+.eq .figure.red{color:var(--signal)}
+.eq .desc{font-size:14px;line-height:1.5;color:#a8a8a8;max-width:560px}
+.eq .desc b{color:var(--paper)}
+
+/* closing */
+.closer h1{margin-bottom:32px}
+.rulelist{counter-reset:rule;margin-top:10px}
+.rulelist li{list-style:none;counter-increment:rule;padding:16px 0;border-bottom:1px solid #262626;font-size:15px;line-height:1.55;color:#c9c9c9;display:flex;gap:20px}
+.rulelist li::before{content:counter(rule,decimal-leading-zero);font-weight:800;color:var(--signal);font-variant-numeric:tabular-nums;flex-shrink:0}
+.rulelist li strong{color:var(--paper)}
+
+@media (max-width:860px){
+  .slide{padding:9vh 7vw}
+  .grid2,.grid3{grid-template-columns:1fr;gap:20px}
+  .pipe{grid-template-columns:1fr}
+  .pipe .stage{border-right:none;border-bottom:1px solid #2a2a2a}
+  .scenrow{grid-template-columns:1fr;gap:8px}
+  .scenrow .prob{text-align:left}
+  .navhint{display:none}
+  table{font-size:12px}
+  th,td{padding:10px 8px}
+}
+@media (prefers-reduced-motion:reduce){
+  .slide,.strike::after,.scenrow .bar .fill,.progress{transition:none}
+}
+.slide:focus{outline:none}
+</style>
+</head>
+<body>
+
+<div class="hud">
+  <div class="mark">WE THE STUDIOS <span>/ FILL OR KILL</span></div>
+  <div class="count" id="count">01 / 13</div>
+</div>
+<div class="progress" id="progress"></div>
+<div class="navhint">← → arrows or click edges</div>
+<div class="navzone left" onclick="nav(-1)"></div>
+<div class="navzone right" onclick="nav(1)"></div>
+
+<div class="deck" id="deck">
+
+<!-- 1 TITLE -->
+<section class="slide active">
+  <div class="eyebrow">Break-even framework · 24 months</div>
+  <h1>Profitable<br>by month 24.<br><span class="strike kill-word">Or it dies.</span></h1>
+  <p class="lede" style="margin-top:36px">A fill-or-kill order executes immediately and completely — or it's cancelled. WTS gets the same terms: <strong>build a business that covers its own costs in 24 months, or liquidate the parts and redeploy the capital.</strong> No zombie projects. No "one more quarter."</p>
+</section>
+
+<!-- 2 THE PREMISE -->
+<section class="slide">
+  <div class="eyebrow">The premise</div>
+  <h2>This is not a lifestyle project.</h2>
+  <p class="lede">WTS converts from a creative venture into a financial decision model. The frameworks in this deck exist for one purpose: to remove emotion from the kill decision.</p>
+  <div class="cardrow grid3">
+    <div class="card hot">
+      <div class="tag">The clock</div>
+      <div class="num">24<small> MO</small></div>
+      <p>Hard window. Three decision gates at months 12, 18, and 24. Each gate is binary.</p>
+    </div>
+    <div class="card">
+      <div class="tag">The target</div>
+      <div class="num">$15K<small> /MO</small></div>
+      <p>Minimum revenue at month 24, with positive cumulative cash. Below that, the order cancels.</p>
+    </div>
+    <div class="card">
+      <div class="tag">The exit</div>
+      <div class="num">PARTS<small> SALE</small></div>
+      <p>Show IP, workflows, and library assets have a buyer universe. Kill means sell, not shelve.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 ASSETS -->
+<section class="slide">
+  <div class="eyebrow">What's on the table</div>
+  <h2>Asset inventory</h2>
+  <ul class="flat">
+    <li><strong>Five produced show properties</strong> — Raising Reynolds, That Girl Lola, Mr. Miami, Kitchen Fight, XO Curtis &amp; Cara</li>
+    <li><strong>Blake Reynolds</strong> as named off-platform creator — owned YouTube/Instagram as the primary audience-building mechanism</li>
+    <li><strong>~50% of the episode library transcribed</strong> into searchable JSON — licensing-ready, clip-ready, RAG-ready</li>
+    <li><strong>Production infrastructure</strong> — workflows, Premiere templates, cutdown pipeline, established visual system</li>
+    <li><strong>Curtis &amp; Cara</strong> as on-camera principals and creative engine</li>
+  </ul>
+</section>
+
+<!-- 4 WHY STANDARD FRAMEWORKS FAIL -->
+<section class="slide">
+  <div class="eyebrow">The toolkit problem</div>
+  <h2>Standard MBA frameworks miss this business.</h2>
+  <table>
+    <thead><tr><th>Framework</th><th>Why it fails here</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Lean Canvas</td><td>Assumes you're solving a customer <em>problem</em>. WTS sells entertainment — identity and connection, not pain relief.</td></tr>
+      <tr><td class="k">Business Model Canvas</td><td>Too generic. Doesn't model algorithm dependence or fragmented monetization.</td></tr>
+      <tr><td class="k">VC Method</td><td>Irrelevant. Nobody is raising. Burn comes from personal capital.</td></tr>
+      <tr><td class="k">Porter's Five Forces</td><td>Built for industry structure. The "industry" here is one algorithm's recommendation feed.</td></tr>
+    </tbody>
+  </table>
+  <p class="lede" style="margin-top:28px">The right toolkit is a <strong>creator-economy stack</strong>: audience is the asset, the algorithm is the channel, monetization is fragmented across small streams. Five layers, next.</p>
+</section>
+
+<!-- 5 LAYER 1 BMC -->
+<section class="slide">
+  <div class="eyebrow">Layer 1 · Strategy</div>
+  <h2>Creator Business Model Canvas</h2>
+  <table>
+    <thead><tr><th>Block</th><th>WTS answer</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Audience</td><td>25–45, affluent, process-curious — drawn to personal storytelling and behind-the-scenes access</td></tr>
+      <tr><td class="k">Value prop</td><td>Authentic voice + cinematic production. Blake Reynolds is the brand, not the shows.</td></tr>
+      <tr><td class="k">Channels</td><td>YouTube primary. Instagram secondary. Clips feed the funnel. One platform owned before expanding.</td></tr>
+      <tr><td class="k">Monetization</td><td>YouTube CPM · sponsorships · FAST licensing · Patreon — in that order of priority</td></tr>
+      <tr class="band"><td class="k">Moat</td><td><b style="color:#fff">Blake himself.</b> Not content quality — good creators are everywhere. His voice, his audience relationship, his brand discipline.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 6 LAYER 2 AARRR -->
+<section class="slide">
+  <div class="eyebrow">Layer 2 · Execution — the heartbeat</div>
+  <h2>Pirate Metrics, creator edition</h2>
+  <p class="lede">If any one of these five trends wrong for two consecutive months, something is broken. Fix it or kill it.</p>
+  <div class="pipe">
+    <div class="stage">
+      <div class="letter">A</div>
+      <div class="sname">Acquisition</div>
+      <p>New subs/month. Growth targets: +30% MoM early, +15% mid, +8% mature.</p>
+    </div>
+    <div class="stage">
+      <div class="letter">A</div>
+      <div class="sname">Activation</div>
+      <p>≥60% of new subs watch a first video. Below that: thumbnails, titles, or audience mismatch.</p>
+    </div>
+    <div class="stage">
+      <div class="letter">R</div>
+      <div class="sname">Retention</div>
+      <p>≥40% watch 2+ videos. The single best predictor of long-term viability.</p>
+    </div>
+    <div class="stage">
+      <div class="letter">R</div>
+      <div class="sname">Revenue</div>
+      <p>$/subscriber/month, broken by stream. Vanity views don't count.</p>
+    </div>
+    <div class="stage">
+      <div class="letter">R</div>
+      <div class="sname">Referral</div>
+      <p>≥40% organic. If the audience isn't evangelizing, the content isn't shareable.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7 LAYER 3 UNIT ECON -->
+<section class="slide">
+  <div class="eyebrow">Layer 3 · Profitability</div>
+  <h2>Unit economics by stream</h2>
+  <table>
+    <thead><tr><th>Stream</th><th>Unit</th><th>Revenue</th><th>Margin</th><th>Character</th></tr></thead>
+    <tbody>
+      <tr><td class="k">YouTube CPM</td><td>per 1,000 views</td><td class="mono">$5</td><td class="mono go">~99%</td><td>Highest margin at scale. Zero marginal cost. Algorithm-dependent.</td></tr>
+      <tr><td class="k">Sponsorship</td><td>per video</td><td class="mono">$500–2,000</td><td class="mono go">~95%</td><td>Lumpy but rich. One bad sponsor poisons trust permanently.</td></tr>
+      <tr><td class="k">FAST licensing</td><td>per deal/month</td><td class="mono">$1,500</td><td class="mono go">~90%</td><td>3–6 month sales cycle. Start outreach in month 1, not month 9.</td></tr>
+      <tr><td class="k">Patreon</td><td>per member/month</td><td class="mono">$7.50</td><td class="mono go">~80%</td><td>Sticky and predictable. The insurance policy against the algorithm.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 8 THE MATH -->
+<section class="slide">
+  <div class="eyebrow">The breakeven math</div>
+  <h2>~$16K/month to cover. Three paths.</h2>
+  <div class="bigmath">
+    <div class="eq">
+      <div class="figure red">320K subs</div>
+      <div class="desc">Pure YouTube CPM path. <b>Unrealistic</b> inside 24 months from a 5K base.</div>
+    </div>
+    <div class="eq">
+      <div class="figure">200K subs</div>
+      <div class="desc">+ 2 licensing deals + steady sponsorships. <b>Plausible</b> with strong execution and early licensing outreach.</div>
+    </div>
+    <div class="eq">
+      <div class="figure">100K subs</div>
+      <div class="desc">+ aggressive Patreon (500 members @ $10) + FAST deal + sponsorships. <b>Viable</b> — but only if execution is tight on every stream simultaneously.</div>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:26px">Fixed monthly burn: Curtis &amp; Cara imputed at $10K, production $3K, marketing $2K, platform/admin $1K.</p>
+</section>
+
+<!-- 9 SCENARIOS -->
+<section class="slide">
+  <div class="eyebrow">Layer 4 · Scenario planning</div>
+  <h2>Three futures, weighted</h2>
+  <div class="scen">
+    <div class="scenrow">
+      <div class="sname">UPSIDE — Scale</div>
+      <div class="bar"><div class="fill up" style="--w:20%">100K+ subs · $25K+/mo</div></div>
+      <div class="prob">20%</div>
+    </div>
+    <div class="scenrow">
+      <div class="sname">BASE — Breakeven</div>
+      <div class="bar"><div class="fill base" style="--w:50%">50–70K subs · $15–20K/mo</div></div>
+      <div class="prob">50%</div>
+    </div>
+    <div class="scenrow">
+      <div class="sname">DOWNSIDE — Kill</div>
+      <div class="bar"><div class="fill down" style="--w:30%">&lt;30K subs · &lt;$12K/mo</div></div>
+      <div class="prob">30%</div>
+    </div>
+  </div>
+  <p class="lede" style="margin-top:32px">Every quarterly review asks one question: <strong>which scenario are we actually in?</strong> The answer redirects spend immediately — no waiting for the next gate.</p>
+</section>
+
+<!-- 10 GATES -->
+<section class="slide">
+  <div class="eyebrow">Layer 4 · Decision gates</div>
+  <h2>Three gates. All binary.</h2>
+  <div class="grid3" style="margin-top:10px">
+    <div class="gate">
+      <div class="glabel">Gate one</div>
+      <div class="gmonth">M12</div>
+      <div class="crit"><b>GO:</b> ≥50K subs and ≥$8K/mo revenue. Double down, hire for a second show.</div>
+      <div class="crit"><b>PIVOT:</b> ≥30K subs but revenue light — sponsorship hustle, launch Patreon now.</div>
+      <div class="verdict"><span class="go">GO ≥50K + $8K</span><span class="kl">KILL &lt;30K</span></div>
+    </div>
+    <div class="gate">
+      <div class="glabel">Gate two</div>
+      <div class="gmonth">M18</div>
+      <div class="crit"><b>GO:</b> ≥100K subs and ≥2 licensing deals signed. Multiple streams working — invest in production.</div>
+      <div class="crit"><b>PIVOT:</b> subs strong, licensing dead — drop the stream, go all-in YouTube + Patreon.</div>
+      <div class="verdict"><span class="go">GO ≥100K + 2 deals</span><span class="kl">KILL &lt;80K</span></div>
+    </div>
+    <div class="gate" style="border-color:var(--blood)">
+      <div class="glabel" style="color:var(--signal)">Final gate</div>
+      <div class="gmonth">M24</div>
+      <div class="crit"><b>SCALE:</b> ≥$15K/mo and cumulative cash positive. Hire team, expand.</div>
+      <div class="crit"><b>HOLD:</b> $12–15K and near-zero cash — optimize, freeze all new spend.</div>
+      <div class="verdict"><span class="go">SCALE ≥$15K</span><span class="kl">LIQUIDATE &lt;$12K</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 RED FLAGS -->
+<section class="slide">
+  <div class="eyebrow">Early warning system</div>
+  <h2>Red flags that pre-empt the gates</h2>
+  <ul class="flat">
+    <li><strong>Subscriber growth flat 3+ months</strong> — pivot content immediately; flat 3 more → kill decision now, not at the next gate</li>
+    <li><strong>Retention below 25%</strong> — stop all paid acquisition the same day; content-audience mismatch must be fixed before another dollar moves</li>
+    <li><strong>Burn above $20K/mo</strong> — freeze hiring, cut marketing; if burn doesn't drop in 30 days, escalate to kill</li>
+    <li><strong>Zero licensing interest by M9</strong> — hire an agent or formally abandon the stream and reallocate</li>
+    <li><strong>Curtis signals burnout or deprioritization</strong> — the honest conversation happens immediately. Nobody forces a zombie project.</li>
+  </ul>
+</section>
+
+<!-- 12 LIQUIDATION -->
+<section class="slide">
+  <div class="eyebrow">If the order cancels</div>
+  <h2>Liquidation playbook</h2>
+  <div class="grid2">
+    <div>
+      <table>
+        <thead><tr><th>Asset</th><th>Est. value</th></tr></thead>
+        <tbody>
+          <tr><td class="k">Show IP (5 properties)</td><td class="mono">$10–50K</td></tr>
+          <tr><td class="k">Blake Reynolds channel</td><td class="mono">$0 — Curtis keeps 100%</td></tr>
+          <tr><td class="k">Workflows &amp; templates</td><td class="mono">$2–5K</td></tr>
+          <tr><td class="k">Brand system</td><td class="mono">Retained in-house</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <p class="lede" style="font-size:15px"><strong>Buyer universe:</strong> creator collectives (Studio71, UTA shorts), FAST aggregators (Pluto, Samsung TV Plus), niche networks, and creators wanting library for derivative content.</p>
+      <p class="lede" style="font-size:15px;margin-top:18px"><strong>Timeline:</strong> quiet soft-market test from day one of a kill trigger. Formal outreach inside 90 days. Transfer, wind down, final accounting. <span class="kill-word" style="font-weight:700">Clean exit, no dragging.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 13 CLOSER -->
+<section class="slide closer">
+  <div class="eyebrow">The non-negotiables</div>
+  <h2>Five rules. Then the order fills or it doesn't.</h2>
+  <ol class="rulelist">
+    <li><strong>Blake is the brand.</strong> No sponsor deal or license is worth poisoning subscriber trust.</li>
+    <li><strong>Consistency beats virality.</strong> A retained audience is worth 10× a viral spike that doesn't convert.</li>
+    <li><strong>Own the audience.</strong> YouTube owns the algorithm — Patreon and email are the insurance.</li>
+    <li><strong>One platform first.</strong> Own YouTube before touching anything else.</li>
+    <li><strong>Kill decisions are clean.</strong> A missed gate executes immediately. There is no "next month will be better."</li>
+  </ol>
+  <p class="lede" style="margin-top:34px">The frameworks don't create audience attention — they measure it. And they say, without emotion, <strong>when to walk away.</strong></p>
+</section>
+
+</div>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+const count=document.getElementById('count');
+const progress=document.getElementById('progress');
+let idx=0;
+function pad(n){return String(n).padStart(2,'0')}
+function render(){
+  slides.forEach((s,i)=>{
+    s.classList.toggle('active',i===idx);
+    s.classList.toggle('prev',i<idx);
+  });
+  count.textContent=pad(idx+1)+' / '+pad(slides.length);
+  progress.style.width=((idx+1)/slides.length*100)+'%';
+}
+function nav(d){
+  idx=Math.max(0,Math.min(slides.length-1,idx+d));
+  render();
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown')nav(1);
+  if(e.key==='ArrowLeft'||e.key==='PageUp')nav(-1);
+  if(e.key==='Home'){idx=0;render()}
+  if(e.key==='End'){idx=slides.length-1;render()}
+});
+let touchX=null;
+document.addEventListener('touchstart',e=>{touchX=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(touchX===null)return;
+  const dx=e.changedTouches[0].clientX-touchX;
+  if(Math.abs(dx)>50)nav(dx<0?1:-1);
+  touchX=null;
+},{passive:true});
+render();
+</script>
+</body>
+</html>
