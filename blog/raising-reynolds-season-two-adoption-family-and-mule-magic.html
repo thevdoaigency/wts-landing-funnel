@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" href="https://wethestudios.com/apple-touch-icon.png" />
 
 <title>Raising Reynolds: Season Two - Adoption, Family, and Mule Magic | We The Studios</title>
-<meta name="description" content="Season 2 of Raising Reynolds brings more laughter, chaos, and heartwarming moments as Blake and Emily continue raising their four adopted children. From chicken coops to treasure hunts, excavators to mules, this season is pure family gold." />
+<meta name="description" content="Season 2 of Raising Reynolds brings more laughter, chaos, and heartwarming moments as Blake and Emily continue raising their four adopted children." />
 <link rel="canonical" href="https://thevdoaigency.github.io/wts-landing-funnel/blog/raising-reynolds-season-two-adoption-family-and-mule-magic.html" />
 
 <!-- Open Graph -->
@@ -20,7 +20,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://thevdoaigency.github.io/wts-landing-funnel/blog/raising-reynolds-season-two-adoption-family-and-mule-magic.html" />
 <meta property="og:site_name" content="We The Studios" />
-<meta property="og:image" content="https://wethestudios.com/assets/images/posters/raising-reynolds.jpg" />
+<meta property="og:image" content="https://wethestudios.com/assets/images/shows/raising-reynolds.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 
@@ -28,7 +28,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Raising Reynolds: Season Two - Adoption, Family, and Mule Magic" />
 <meta name="twitter:description" content="Season 2 of Raising Reynolds brings more laughter, chaos, and heartwarming moments as Blake and Emily continue raising their four adopted children." />
-<meta name="twitter:image" content="https://wethestudios.com/assets/images/posters/raising-reynolds.jpg" />
+<meta name="twitter:image" content="https://wethestudios.com/assets/images/shows/raising-reynolds.jpg" />
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -42,7 +42,7 @@
   "@type": "Article",
   "headline": "Raising Reynolds: Season Two - Adoption, Family, and Mule Magic",
   "description": "Season 2 of Raising Reynolds brings more laughter, chaos, and heartwarming moments as Blake and Emily continue raising their four adopted children.",
-  "image": "https://wethestudios.com/assets/images/posters/raising-reynolds.jpg",
+  "image": "https://wethestudios.com/assets/images/shows/raising-reynolds.jpg",
   "author": { "@type": "Person", "name": "Cara Leopardo, Founder &amp; CEO" },
   "publisher": {
     "@type": "Organization",
@@ -57,43 +57,80 @@
   :root {
     --red: #EF1212;
     --ink: #161412;
-    --gray: #f5f5f5;
-    --line: #e0e0e0;
-    --font-main: 'Inter', sans-serif;
+    --line: #E7E4DE;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
   body {
-    font-family: var(--font-main);
     background: white;
     color: var(--ink);
-    line-height: 1.7;
-    font-size: 18px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 400;
+    line-height: 1.55;
+    overflow-x: hidden;
   }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
 
-  .container {
-    max-width: 740px;
-    margin: 0 auto;
-    padding: 60px 20px;
-  }
+  .wrap { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+  @media (min-width: 1024px) { .wrap { padding: 0 48px; } }
 
-  h1 { font-size: 3rem; font-weight: 800; line-height: 1.2; margin-bottom: 24px; color: var(--ink); }
-  h2 { font-size: 2.25rem; font-weight: 700; margin: 48px 0 24px; color: var(--ink); border-top: 3px solid var(--red); padding-top: 24px; }
-  h3 { font-size: 1.5rem; font-weight: 600; margin: 36px 0 16px; }
-  p { margin-bottom: 24px; }
-
-  .meta {
-    font-family: var(--font-main);
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 32px;
+  /* ========== NAV ========== */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--line);
-    padding-bottom: 20px;
   }
 
-  a { color: var(--red); text-decoration: none; font-weight: 500; }
-  a:hover { text-decoration: underline; }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 80px;
+  }
+  .logo { font-weight: 900; font-size: 1.5rem; letter-spacing: -1px; }
+  .logo span { color: var(--red); }
+
+  /* ========== HERO ========== */
+  .hero {
+    text-align: center;
+    padding: 80px 24px;
+    background: white;
+  }
+
+  h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
+  .byline { font-family: 'Inter', sans-serif; color: #666; font-size: 1rem; }
+
+  .article-hero-img {
+    max-width: 800px;
+    margin: 48px auto 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  }
+  .article-hero-img img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ========== CONTENT ========== */
+  article.prose {
+    max-width: 760px;
+    margin: 48px auto;
+    padding-bottom: 80px;
+  }
+  article.prose p { font-size: clamp(1.1rem, 2vw, 1.35rem); line-height: 1.8; margin-bottom: 32px; }
+  h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; margin: 64px 0 24px; color: var(--ink); }
+  .highlight {
+    background: #f9f9f9;
+    border-left: 4px solid var(--red);
+    padding: 32px;
+    margin: 40px 0;
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+    line-height: 1.7;
+    font-style: italic;
+  }
 
   .btn {
     display: inline-block;
@@ -103,109 +140,149 @@
     border-radius: 4px;
     font-weight: 600;
     text-decoration: none;
-    margin-top: 24px;
+    margin-top: 32px;
     transition: background 0.2s ease;
   }
-  .btn:hover { background: var(--red-dark); }
+  .btn:hover { background: #c10b0b; }
 
-  .highlight {
-    background: #fff8f8;
-    border-left: 4px solid var(--red);
-    padding: 24px;
-    margin: 32px 0;
-    font-style: italic;
-  }
-
-  ul { list-style: none; margin: 24px 0; }
-  li { margin-bottom: 12px; position: relative; padding-left: 28px; }
-  li::before {
-    content: "•";
-    color: var(--red);
-    font-weight: bold;
-    position: absolute;
-    left: 0;
-    top: -4px;
-    font-size: 1.5rem;
-    line-height: 1;
-  }
-
-  .section-title { font-size: 1.25rem; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 32px; }
-  
   footer {
     text-align: center;
-    padding: 60px 20px;
-    background: #1a1816;
+    padding: 80px 24px;
+    background: var(--ink);
     color: white;
-    margin-top: 80px;
   }
 </style>
 
 </head>
 <body>
-<div class="container">
-  <div class="meta">Published on July 12, 2026 | <span style="color:var(--red)">We The Studios</span></div>
-  
-  <h1>Raising Reynolds: Season Two - Adoption, Family, and Mule Magic</h1>
-  
-  <p>Welcome back to another incredible season of <em>Raising Reynolds</em>! This season brings more laughter, chaos, and heartwarming moments from Blake and Emily Reynolds as they continue their journey raising four amazing adopted children: Brianna (15), Mikayla (13), Kingston (10), and Allie (4).</p>
 
-  <div class="section-title">A Season of Firsts</div>
-  <p>Season 2 opens with a household in full swing—and Blake has some new challenges to tackle. The season kicks off with the family building a chicken coop together, a project that quickly becomes more than just construction—it's a lesson in responsibility, teamwork, and the importance of giving back.</p>
-
-  <div class="section-title">Major Moments from Season 2</div>
-  
-  <h2>🐔 Chicken Coop Construction</h2>
-  <p>The Reynolds decide it's time for an upgrade to their chicken coop after realizing their old one wasn't cut out for their growing kids—and their active chickens. Blake enlists the help of Brianna, Mikayla, Kingston, and Allie in what becomes a full-day family project. What starts as a practical solution turns into a heart-to-heart conversation about race, parenting mixed-race children in Kentucky, and teaching principles over perfection.</p>
-
-  <h2>🌲 The Treasure Hunt Adventure</h2>
-  <p>A mysterious neighbor named Anton Panda shows up with a treasure map, promising adventure in the woods. What begins as skepticism from Emily quickly transforms into pure magic as the family embarks on an unforgettable journey through the forest. This episode includes one of the most emotional moments of the season: Blake using wolf howls to call for their missing son Kingston, leading to a tear-jerking reunion and reflection on family bonds.</p>
-
-  <h2>🎢 Fun Spot Orlando Adventure</h2>
-  <p>The Reynolds take the kids to Fun Spot America in Orlando—and what follows is pure entertainment gold. From the first roller coaster (complete with Emily's terrifying scream) to feeding alligators face-to-face, this episode showcases Blake's fearless dad persona trying to maintain his cool while secretly terrified of heights, snakes, and gators.</p>
-  
-  <ul>
-    <li>The Freedom Fighter roller coaster ride</li>
-    <li>Feeding gators at the reptile exhibit</li>
-    <li>Kingston's first time on a go-kart (with a win for Dad!)</li>
-    <li>Emily's panic over snake handling while the kids beg to touch everything</li>
-  </ul>
-
-  <h2>🛠️ Heavy Machinery Mayhem</h2>
-  <p>Kingston gets his "rite of passage"—driving an excavator to install a flagpole in preparation for a family party. What starts as a teaching moment quickly turns chaotic when Kingston accidentally destroys Emily's beloved mini-car (affectionately nicknamed "Black Betty"). The fallout leads to one of the funniest scenes in the season: Blake decides to smash the car with the very same excavator, complete with Donald Trump surviving the crash and the family celebrating the destruction.</p>
-
-  <h2>🏠 Role Reversal Day</h2>
-  <p>In a brilliant twist, Blake and Emily switch roles for a day—the kids run the household while Mom and Dad chill on the patio. What follows is chaos, creative cooking attempts (including pickles smoothies), and the ultimate test of parenting skills when the kids realize just how much work goes into running a household.</p>
-
-  <h2>🐎 Mule Magic</h2>
-  <p>Allie's dream of having a horse comes true—but not quite as expected. What arrives isn't a horse but a beautiful, gentle 20-year-old mule named Molly (or "Molly the Mule"). The season finale features Allie riding her new companion while Blake tries to keep up with the family's expanding animal kingdom.</p>
-
-  <div class="section-title">Themes of Season 2</div>
-  
-  <ul>
-    <li><strong>Adoption & Identity:</strong> The Reynolds reflect on their adoption journey and the importance of celebrating each child's unique background</li>
-    <li><strong>Parenting Mixed-Race Children:</strong> Blake shares his honest thoughts on raising half-Black children in Kentucky without assuming cultural knowledge he doesn't possess</li>
-    <li><strong>Family Traditions:</strong> From adoption day parties to flagpole installations, the family creates new traditions while honoring old ones</li>
-    <li><strong>Health & Wellness:</strong> Emily pushes for healthier living with workouts and juicing—Blake reluctantly participates with signature humor</li>
-  </ul>
-
-  <div class="highlight">
-    <p>"We learned early on that we were not going to be able to have children. All of our friends who got married at the same time as us were having kids after kids, after kids. We ended up saying, okay, Lord, will do foster care, but we only want two kids. We ended up taking three at one time."</p>
+<div class="nav">
+  <div class="nav-inner wrap">
+    <a href="https://wethestudios.com" class="logo">We<span>The</span>Studios</a>
   </div>
-
-  <p>The season closes with Blake reflecting on their journey and encouraging others to consider fostering or adoption:</p>
-  
-  <div class="highlight">
-    <p>"There are so many kids in our system today that are in foster care and need of either adopting or a foster home... I encourage everybody to do the foster care process. Do the adoption process. There's kids out there that don't have somebody to call dad."</p>
-  </div>
-
-  <h2>What's Next?</h2>
-  <p>With their animal family expanding, their kids thriving, and their home filled with laughter (and occasional chaos), Season 2 of <em>Raising Reynolds</em> proves once again why this family resonates with audiences worldwide.</p>
-  
-  <p><strong>The main lesson?</strong> Family isn't about biology—it's about love, commitment, and being there for each other through every chicken coop build, treasure hunt, and mule adventure.</p>
-
-  <a href="https://thevdoaigency.github.io/wts-landing-funnel/" class="btn">Watch Raising Reynolds on We The Studios</a>
-  
 </div>
+
+<div class="hero wrap">
+  <h1>Raising Reynolds: Season Two - Adoption, Family, and Mule Magic</h1>
+  <div class="byline">By Cara Leopardo, Founder & CEO · July 12, 2026</div>
+  
+  <div class="article-hero-img">
+    <img src="https://wethestudios.com/assets/images/shows/raising-reynolds.jpg" alt="Raising Reynolds: Season Two — streaming on We The Studios" />
+  </div>
+</div>
+
+<article class="wrap prose">
+
+<p>If you've ever started a show with your kids, gotten four minutes in, and then dove across the couch for the remote because somebody on screen said something you're now going to be explaining at dinner—this one's for you.</p>
+
+<p>We have four kids. We've made that dive more times than we can count. It's the entire reason we built We The Studios in the first place: nobody was making TV for families anymore, so we did.</p>
+
+<p>The shows below are the kind you can put on without a pre-screen, a hovering thumb on the remote, or that low-grade dread in your stomach. Real entertainment—funny, sweet, occasionally great—minus the profanity, the suggestive content, and the stuff that ages a kid five years in thirty seconds.</p>
+
+<h2>What "no bad language" should actually mean</h2>
+
+<p>Here's the problem with most "family-friendly" labels: they're a vibe, not a standard. A show gets called family-friendly because it has a kid in it, and then somewhere in episode three the dialogue turns and you're scrambling.</p>
+
+<p>When we say a show is safe at We The Studios, we mean a real line in the sand: no profanity, no sexual content, and no glorifying alcohol. Not "mostly." Not "depends on the episode." Every series, every episode. That's the whole promise—you shouldn't have to keep auditing.</p>
+
+<h2>Raising Reynolds: Season Two</h2>
+
+<p>Season 2 of <em>Raising Reynolds</em> picks up right where we left off—with Blake and Emily raising their four amazing adopted children: Brianna (15), Mikayla (13), Kingston (10), and Allie (4). But this season brings new challenges, new adventures, and some truly unforgettable moments.</p>
+
+<p>The season kicks off with a household in full swing—and Blake has some new challenges to tackle. The family decides to build a chicken coop together, a project that quickly becomes more than just construction—it's a lesson in responsibility, teamwork, and the importance of giving back.</p>
+
+<h3>Chicken Coop Construction</h3>
+
+<p>The Reynolds decide it's time for an upgrade to their chicken coop after realizing their old one wasn't cut out for their growing kids—and their active chickens. Blake enlists the help of Brianna, Mikayla, Kingston, and Allie in what becomes a full-day family project.</p>
+
+<p>What starts as a practical solution turns into a heart-to-heart conversation about race, parenting mixed-race children in Kentucky, and teaching principles over perfection. Blake shares his honest thoughts on raising half-Black children without assuming cultural knowledge he doesn't possess:</p>
+
+<div class="highlight">
+  <p>"I don't know how to be a black man—you know? And Emily don't know how to be a black woman. We can only raise our kids the way that we raise our kids. So we take race out of it. We parent based off principles."</p>
+</div>
+
+<h3>The Treasure Hunt Adventure</h3>
+
+<p>A mysterious neighbor named Anton Panda shows up with a treasure map, promising adventure in the woods. What begins as skepticism from Emily quickly transforms into pure magic as the family embarks on an unforgettable journey through the forest.</p>
+
+<p>This episode includes one of the most emotional moments of the season: Blake using wolf howls to call for their missing son Kingston, leading to a tear-jerking reunion and reflection on family bonds. The real treasure? It was being together all along.</p>
+
+<h3>Fun Spot Orlando Adventure</h3>
+
+<p>The Reynolds take the kids to Fun Spot America in Orlando—and what follows is pure entertainment gold. From the first roller coaster (complete with Emily's terrifying scream) to feeding alligators face-to-face, this episode showcases Blake's fearless dad persona trying to maintain his cool while secretly terrified of heights, snakes, and gators.</p>
+
+<p><strong>Highlights include:</strong></p>
+
+<ul>
+  <li>The Freedom Fighter roller coaster ride</li>
+  <li>Feeding gators at the reptile exhibit</li>
+  <li>Kingston's first time on a go-kart (with a win for Dad!)</li>
+  <li>Emily's panic over snake handling while the kids beg to touch everything</li>
+</ul>
+
+<h3>Heavy Machinery Mayhem</h3>
+
+<p>Kingston gets his "rite of passage"—driving an excavator to install a flagpole in preparation for a family party. What starts as a teaching moment quickly turns chaotic when Kingston accidentally destroys Emily's beloved mini-car (affectionately nicknamed "Black Betty").</p>
+
+<p>The fallout leads to one of the funniest scenes in the season: Blake decides to smash the car with the very same excavator, complete with Donald Trump surviving the crash and the family celebrating the destruction. The lesson? Sometimes accidents happen—and sometimes you just need to laugh about it.</p>
+
+<h3>Role Reversal Day</h3>
+
+<p>In a brilliant twist, Blake and Emily switch roles for a day—the kids run the household while Mom and Dad chill on the patio. What follows is chaos, creative cooking attempts (including pickles smoothies), and the ultimate test of parenting skills when the kids realize just how much work goes into running a household.</p>
+
+<h3>Mule Magic</h3>
+
+<p>Allie's dream of having a horse comes true—but not quite as expected. What arrives isn't a horse but a beautiful, gentle 20-year-old mule named Molly (or "Molly the Mule"). The season finale features Allie riding her new companion while Blake tries to keep up with the family's expanding animal kingdom.</p>
+
+<h2>Themes of Season Two</h2>
+
+<p>This season dives deeper into:</p>
+
+<ul>
+  <li><strong>Adoption & Identity:</strong> The Reynolds reflect on their adoption journey and the importance of celebrating each child's unique background</li>
+  <li><strong>Parenting Mixed-Race Children:</strong> Blake shares his honest thoughts on raising half-Black children in Kentucky without assuming cultural knowledge he doesn't possess</li>
+  <li><strong>Family Traditions:</strong> From adoption day parties to flagpole installations, the family creates new traditions while honoring old ones</li>
+  <li><strong>Health & Wellness:</strong> Emily pushes for healthier living with workouts and juicing—Blake reluctantly participates with signature humor</li>
+</ul>
+
+<div class="highlight">
+  <p>"We learned early on that we were not going to be able to have children. All of our friends who got married at the same time as us were having kids after kids, after kids. We ended up saying, okay, Lord, will do foster care, but we only want two kids. We ended up taking three at one time."</p>
+</div>
+
+<p>The season closes with Blake reflecting on their journey and encouraging others to consider fostering or adoption:</p>
+
+<div class="highlight">
+  <p>"There are so many kids in our system today that are in foster care and need of either adopting or a foster home... I encourage everybody to do the foster care process. Do the adoption process. There's kids out there that don't have somebody to call dad."</p>
+</div>
+
+<h2>Why This Is Safe for Everyone (Even the Eye-Rolling Tweens)</h2>
+
+<p>When we say a show is safe at We The Studios, we mean a real line in the sand: no profanity, no sexual content, and no glorifying alcohol. Not "mostly." Not "depends on the episode." Every series, every episode.</p>
+
+<p><em>Raising Reynolds</em> Season 2 passes with room to spare:</p>
+
+<ul>
+  <li><strong>Language?</strong> Clean—occasional "y'all," "suck" (in context), and "dude," but zero curse words or inappropriate phrasing.</li>
+  <li><strong>Themes?</strong> Adoption, fostering, blended families, teaching responsibility, and the importance of family time.</li>
+</ul>
+
+<p>The show handles sensitive topics with honesty, humor, and heart—never crossing into inappropriate territory while still being real enough to resonate with both kids and adults.</p>
+
+<h2>Raising Reynolds: The Show That Shows What Real Parenting Looks Like</h2>
+
+<p>Real parenting isn't pretty. It's messy, chaotic, frustrating—and absolutely beautiful.</p>
+
+<p><em>Raising Reynolds</em> doesn't sugarcoat anything. It shows Blake and Emily yelling when they're stressed, crying when they're overwhelmed, laughing when they're exhausted—and loving their kids through every single moment.</p>
+
+<p>The show reminds us that it's okay to not have all the answers. It's okay to mess up. What matters is showing up, being present, and never giving up on your family.</p>
+
+<div class="highlight">
+  <p><strong>The main lesson?</strong> Family isn't about biology—it's about love, commitment, and being there for each other through every chicken coop build, treasure hunt, excavator mishap, and mule adventure.</p>
+</div>
+
+<a href="https://wethestudios.com/show/raising-reynolds" class="btn">Watch Raising Reynolds on We The Studios</a>
+
+</article>
 
 <footer>
   <p>&copy; 2026 We The Studios. All rights reserved.</p>
